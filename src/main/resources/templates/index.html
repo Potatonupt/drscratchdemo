@@ -137,8 +137,6 @@
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const loginLink = document.getElementById("login-link");
-        const registerLink = document.getElementById("register-link");
         const fileInput = document.getElementById("project-file");
         const fileNameInput = document.getElementById("file-name");
         const uploadButton = document.getElementById("upload-button");
@@ -174,28 +172,7 @@
             }
         });
 
-        uploadButton.addEventListener("click", function () {
-            const file = fileInput.files[0];
 
-            if (file) {
-                const formData = new FormData();
-                formData.append("project", file);
-
-                fetch("/upload", {
-                    method: "POST",
-                    body: formData,
-                })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        const resultDiv = document.getElementById("result");
-                        resultDiv.innerHTML = `<p>Analysis Result:</p>
-            <pre>${JSON.stringify(data, null, 2)}</pre>`;
-                    })
-                    .catch((error) => {
-                        console.error("Error uploading file:", error);
-                    });
-            }
-        });
     });
 
 
