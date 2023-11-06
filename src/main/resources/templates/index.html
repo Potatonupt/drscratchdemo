@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Scratch Project Analysis</title>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .box {
+            background-image: linear-gradient(to right, #999999, #330867);
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+
+        }
+
+        .container {
+            max-width: 600px;
+            padding: 20px 50px;
+            position: relative;
+            left: 50%;
+            top: 40%;
+            transform: translate(-50%, -50%);
+            background-color: bisque;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: black;
+        }
+
+        #upload-form {
+            text-align: center;
+        }
+
+        #project-file {
+            display: none;
+        }
+
+        .upload-label {
+            display: inline-block;
+            background-image: linear-gradient(to right, #a6c1ee, #fbc2eb);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        label.upload-label:hover {
+            background-color: #d7ceef;
+        }
+
+        #file-name {
+            display: inline-block;
+            padding: 10px 20px;
+            border: 1px solid #d7ceef;
+            border-radius: 5px;
+            color: #a6c1ee;
+            font-weight: bold;
+        }
+
+        #result {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            border-color: #d7ceef;
+            padding: 0 20px;
+            background-color: #ffebd6;
+        }
+
+        p.result-text {
+            font-size: 18px;
+            color: #333;
+        }
+
+        a.result-link {
+            text-decoration: none;
+            color: #a6c1ee;
+        }
+
+        .navbar {
+            background-image: linear-gradient(to right, #999999, #330867);
+            overflow: hidden;
+            top: 0;
+            width: 100%;
+        }
+
+        .navbar a {
+            float: right;
+            display: block;
+            color: #fff;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .navbar a:hover {
+            background-color: #d7ceef;
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="box">
+    <div class="navbar">
+        <a href="#" id="login-link">Login</a>
+        <a href="#" id="register-link">Register</a>
+    </div>
+    <div class="container">
+        <h1>Upload Your Scratch Project</h1>
+        <form id="upload-form" enctype="multipart/form-data">
+            <input type="file" id="project-file" accept=".sb3"/>
+            <input type="text" id="file-name" readonly/>
+            <label for="project-file" class="upload-label">Choose File</label>
+            <label type="button" id="upload-button" class="upload-label">Upload</label>
+        </form>
+        <div id="result">
+            <p class="result-text">Analysis Result:</p>
+            <p class="result-text">
+                <a class="result-link" href="#">Download Detailed Report</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const loginLink = document.getElementById("login-link");
+        const registerLink = document.getElementById("register-link");
+        const fileInput = document.getElementById("project-file");
+        const fileNameInput = document.getElementById("file-name");
+        const uploadButton = document.getElementById("file-name");
+
+        loginLink.addEventListener("click", function (event) {
+            event.preventDefault();
+            openPage("login.html");
+        });
+
+        registerLink.addEventListener("click", function (event) {
+            event.preventDefault();
+            openPage("register.html");
+        });
+
+        // 当文件选择发生变化时，更新文本框中的文件名
+        fileInput.addEventListener("change", function () {
+            if (fileInput.files.length > 0) {
+                fileNameInput.value = fileInput.files[0].name;
+            } else {
+                fileNameInput.value = "";
+            }
+        });
+
+        uploadButton.addEventListener("click", function () {
+            const file = fileInput.files[0];
+
+            if (file) {
+                const formData = new FormData();
+                formData.append("project", file);
+
+                fetch("/upload", {
+                    method: "POST",
+                    body: formData,
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const resultDiv = document.getElementById("result");
+                        resultDiv.innerHTML = `<p>Analysis Result:</p>
+            <pre>${JSON.stringify(data, null, 2)}</pre>`;
+                    })
+                    .catch((error) => {
+                        console.error("Error uploading file:", error);
+                    });
+            }
+        });
+    });
+
+    function openPage(pageUrl) {
+        window.open(pageUrl, "_blank");
+    }
+</script>
+</body>
+
+</html>
