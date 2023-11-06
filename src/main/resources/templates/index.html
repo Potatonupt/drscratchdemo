@@ -115,8 +115,8 @@
 <body>
 <div class="box">
     <div class="navbar">
-        <a th:href="@{/login}" id="login-link">Login</a>
-        <a th:href="@{/register}">Register</a>
+        <a href="#" id="login-link">Login</a>
+        <a href="#" id="register-link">Register</a>
     </div>
     <div class="container">
         <h1>Upload Your Scratch Project</h1>
@@ -141,16 +141,28 @@
         const registerLink = document.getElementById("register-link");
         const fileInput = document.getElementById("project-file");
         const fileNameInput = document.getElementById("file-name");
-        const uploadButton = document.getElementById("file-name");
+        const uploadButton = document.getElementById("upload-button");
+        uploadButton.addEventListener("click", function () {
+            const file = fileInput.files[0];
 
-        loginLink.addEventListener("click", function (event) {
-            event.preventDefault();
-            openPage("login.html");
-        });
+            if (file) {
+                const formData = new FormData();
+                formData.append("file", file);
 
-        registerLink.addEventListener("click", function (event) {
-            event.preventDefault();
-            openPage("register.html");
+                fetch("/upload", {
+                    method: "POST",
+                    body: formData,
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const resultDiv = document.getElementById("result");
+                        resultDiv.innerHTML = `<p class="result-text">Analysis Result:</p>
+                <pre>${JSON.stringify(data, null, 2)}</pre>`;
+                    })
+                    .catch((error) => {
+                        console.error("Error uploading file:", error);
+                    });
+            }
         });
 
         // 当文件选择发生变化时，更新文本框中的文件名
@@ -185,6 +197,7 @@
             }
         });
     });
+
 
     function openPage(pageUrl) {
         window.open(pageUrl, "_blank");
