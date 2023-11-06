@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
+    <title>User Registration</title>
 
     <style>
         * {
@@ -97,19 +97,20 @@
     </style>
 </head>
 <body>
-<h1>User Registration</h1>
-<form action="/register" method="post">
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" required>
-    <br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required>
-    <br>
-    <button type="submit">Register</button>
-</form>
-<p th:if="${error}" th:text="${error}" style="color: red;"></p>
-<p th:if="${message}" th:text="${message}" style="color: green;"></p>
+<div class="container">
+    <div class="register-wrapper">
+        <div class="header">Register</div>
+        <div class="form-wrapper">
+            <form action="/register" method="post">
+                <input type="text" id="username" name="username" placeholder="Username" class="input-item" required>
+                <input type="password" id="password" name="password" placeholder="Password" class="input-item" required>
+                <button type="submit" class="btn">Register</button>
+            </form>
+            <p th:if="${error}" th:text="${error}" style="color: red;" class="msg"></p>
+            <p th:if="${message}" th:text="${message}" style="color: green;" class="msg"></p>
+            <p>Already have an account? <a th:href="@{/login}">Sign up</a></p>
+        </div>
+    </div>
+</div>
 </body>
 </html>
-
-
