@@ -140,6 +140,8 @@
         const fileInput = document.getElementById("project-file");
         const fileNameInput = document.getElementById("file-name");
         const uploadButton = document.getElementById("upload-button");
+        const login = document.getElementById("login-link");
+        const register = document.getElementById("register-link");
         uploadButton.addEventListener("click", function () {
             const file = fileInput.files[0];
 
@@ -173,7 +175,45 @@
         });
 
 
+        login.addEventListener("click",function () {
+            // 发起GET请求到后端的/toLogin
+            fetch("/toLogin", {
+                method: "GET",
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // 如果请求成功，重定向到/login页面
+                        window.location.href = "/login";
+                    } else {
+                        // 处理请求失败的情况
+                        console.error("Failed to redirect to login.");
+                    }
+                });
+        })
+
+        register.addEventListener("click",function () {
+            // 发起GET请求到后端的/toLogin
+            fetch("/toRegister", {
+                method: "GET",
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // 如果请求成功，重定向到/login页面
+                        window.location.href = "/register";
+                    } else {
+                        // 处理请求失败的情况
+                        console.error("Failed to redirect to register.");
+                    }
+                });
+        })
+
+
+
+
+
     });
+
+
 
 
     function openPage(pageUrl) {
