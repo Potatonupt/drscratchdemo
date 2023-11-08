@@ -43,51 +43,11 @@ public class FileUploadController
 //                        System.out.println("JSON File Content: " + jsonContent.toString());
 
                         String json = jsonContent.toString();
-                        try
+                        int[] result = JsonAnalyzer.analyzeSb3Project(json);
+                        for (var i : result)
                         {
-                            // 初始化 Jackson ObjectMapper
-                            ObjectMapper objectMapper = new ObjectMapper();
-
-                            // 解析 JSON 数据
-                            JsonNode rootNode = objectMapper.readTree(json);
-
-                            // 初始化计数器
-                            int totalIfStatementCount = 0;
-
-                            // 遍历每个角色
-                            JsonNode targets = rootNode.get("targets");
-                            for (JsonNode target : targets) {
-                                if (!target.has("blocks")) {
-                                    continue;
-                                }
-
-                                int ifStatementCount = 0;
-
-                                // 遍历角色的blocks字段，查找"opcode"为"control_if"的块
-                                JsonNode blocks = target.path("blocks");
-                                for (JsonNode block : blocks) {
-                                    if (block.has("opcode") && block.get("opcode").asText().equals("control_if")) {
-                                        ifStatementCount++;
-                                    }
-                                }
-
-                                // 打印每个角色的if语句数量
-                                System.out.println("角色 '" + target.get("name").asText() + "' 的if语句数量: " + ifStatementCount);
-
-                                // 累加到总计数器
-                                totalIfStatementCount += ifStatementCount;
-                            }
-
-                            // 打印总if语句的数量
-                            System.out.println("总if语句的数量: " + totalIfStatementCount);
-
-
+                            System.out.println(i);
                         }
-                        catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-
                     }
                 }
                 zipInputStream.close();
