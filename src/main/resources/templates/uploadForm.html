@@ -18,7 +18,7 @@
 </div>
 <script th:inline="javascript">
     // 获取Spring模型中的result数组
-    var result = [[${result}]]; // 使用示例数据  [10, 20, 30, 40, 50]
+    var result = [[${resultArray}]]; // 使用示例数据  [10, 20, 30, 40, 50]
 
     // 创建条形图
     var ctx = document.getElementById("bar-chart").getContext("2d");

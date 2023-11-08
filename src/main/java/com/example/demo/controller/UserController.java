@@ -69,7 +69,7 @@ public class UserController {
 
         if (resultArray != null) {
             // 将resultArray传递到另一个页面的模型中
-            model.addAttribute("result", resultArray);
+            model.addAttribute("resultArray", resultArray);
         }
 
         return "uploadForm"; // 返回另一个前端页面
