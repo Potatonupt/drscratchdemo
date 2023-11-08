@@ -2,9 +2,48 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bar Chart</title>
+    <!-- 引入Chart.js库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-<p>1</p>
+<div class="navbar">
+    <a href="index.html" id="home-link">Back Home</a>
+</div>
+<div class="container">
+    <div class="bargraph">
+        <canvas id="bar-chart"></canvas>
+    </div>
+</div>
+<script th:inline="javascript">
+    // 获取Spring模型中的result数组
+    var result = [[${result}]]; // 使用示例数据  [10, 20, 30, 40, 50]
+
+    // 创建条形图
+    var ctx = document.getElementById("bar-chart").getContext("2d");
+    var myChart = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: ["Label 1", "Label 2", "Label 3", "Label 4", "Label 5"], // 可以自定义标签
+            datasets: [
+                {
+                    label: "Bar Chart",
+                    data: result,
+                    backgroundColor: "rgba(75, 192, 192, 0.2)", // 条形的背景颜色
+                    borderColor: "rgba(75, 192, 192, 1)", // 条形的边框颜色
+                    borderWidth: 1, // 条形的边框宽度
+                },
+            ],
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                },
+            },
+        },
+    });
+</script>
 </body>
 </html>

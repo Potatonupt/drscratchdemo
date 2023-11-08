@@ -1,16 +1,18 @@
 package com.example.demo.controller;
 
 import com.example.demo.analysis.JsonAnalyzer;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -18,8 +20,10 @@ import java.util.zip.ZipInputStream;
 public class FileUploadController
 {
     @PostMapping("/upload")
-    public String uploadFile(@RequestParam("file") MultipartFile file, Model model)
+    @ResponseBody
+    public Map<String, Object> uploadFile(@RequestParam("file") MultipartFile file, HttpSession session)
     {
+        Map<String, Object> response = new HashMap<>();
         if (file != null && !file.isEmpty())
         {
             try
@@ -44,24 +48,27 @@ public class FileUploadController
 
                         String json = jsonContent.toString();
                         int[] result = JsonAnalyzer.analyzeSb3Project(json);
-                        for (var i : result)
-                        {
-                            System.out.println(i);
-                        }
+                        session.setAttribute("resultArray", result);
+//                        for (var i : result)
+//                        {
+//                            System.out.println(i+"\n");
+//                        }
                     }
                 }
                 zipInputStream.close();
-                model.addAttribute("message", "File analysis completed.");
+                response.put("success", true);
             }
             catch (IOException e)
             {
-                model.addAttribute("error", "File analysis failed: " + e.getMessage());
+                response.put("success", false);
+                response.put("error", "File analysis failed: " + e.getMessage());
             }
         }
         else
         {
-            model.addAttribute("error", "Please select a file to upload.");
+            response.put("success", false);
+            response.put("error", "Please select a file to upload.");
         }
-        return "uploadForm";
+        return response;
     }
 }

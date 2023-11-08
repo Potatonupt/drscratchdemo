@@ -157,13 +157,15 @@
                     method: "POST",
                     body: formData,
                 })
-                    .then((response) => response.json())
-                    .then((data) => {
-                        const resultDiv = document.getElementById("result");
-                        resultDiv.innerHTML = `<p class="result-text">Analysis Result:</p>
-                <pre>${JSON.stringify(data, null, 2)}</pre>`;
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location.href = "/uploadForm"; // 重定向到结果页面
+                        } else {
+                            console.error("File upload failed.");
+                        }
                     })
-                    .catch((error) => {
+                    .catch(error => {
                         console.error("Error uploading file:", error);
                     });
             }

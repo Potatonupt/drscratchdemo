@@ -62,6 +62,19 @@ public class UserController {
         }
     }
 
+
+    @GetMapping("/uploadForm")
+    public String showAnotherPage(HttpSession session, Model model) {
+        int[] resultArray = (int[]) session.getAttribute("resultArray");
+
+        if (resultArray != null) {
+            // 将resultArray传递到另一个页面的模型中
+            model.addAttribute("result", resultArray);
+        }
+
+        return "uploadForm"; // 返回另一个前端页面
+    }
+
     @GetMapping("/user/{username}")
     public String userProfile(@PathVariable String username, Model model) {
         // 根据用户名查询用户的个人信息，然后将信息传递给模板
