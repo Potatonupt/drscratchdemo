@@ -7,15 +7,81 @@
     <!-- 引入Chart.js库 -->
     <script src="https://cdn.bootcss.com/echarts/3.5.4/echarts.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: "Arial", sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .box {
+            background-image: linear-gradient(to right, #999999, #330867);
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0px;
+            bottom: 0px;
+
+        }
+
+        .container {
+            background-color: bisque;
+            width: 358px;
+            height: 588px;
+            border-radius: 15px;
+            padding: 0 50px;
+            position: relative;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        h1 {
+            text-align: center;
+            color: black;
+        }
+
+        label.upload-label:hover {
+            background-color: #d7ceef;
+        }
+
+        .navbar {
+            background-image: linear-gradient(to right, #999999, #330867);
+            overflow: hidden;
+            top: 0;
+            width: 100%;
+        }
+
+        .navbar a {
+            float: right;
+            display: block;
+            color: #fff;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .navbar a:hover {
+            background-color: #d7ceef;
+        }
+
+    </style>
 </head>
 <body>
-<div class="navbar">
-    <label id="home-link">Back Home</label>
+<div class="box">
+    <div class="navbar">
+        <label id="home-link">Back Home</label>
+    </div>
+    <div class="container">
+        <div id="main" style="width: 1000px;height:400px;"></div>
+        <div style="width: 600px;height:600px;">
+            <canvas id="pie-chart"></canvas>
+        </div>
+    </div>
 </div>
-<div id="main" style="width: 1000px;height:400px;"></div>
-<div style="width: 600px;height:600px;">
-    <canvas id="pie-chart"></canvas>
-</div>
+<p id="score"></p>
 <script th:inline="javascript">
     // 获取Spring模型中的result数组
     var myChart = echarts.init(document.getElementById('main'));
@@ -29,6 +95,7 @@
     pie[2] = result[2]
     pie[3] = result[5]
     pie[4] = result[1] + result[0]//视觉
+    var score = 0.4 * pie[0] + 0.1 * pie[1] + 0.1 * pie[2] + 0.1 * pie[3] + 0.3 * pie[4]
     for (let i = 0; i < result.length; i++) {
         percent[i] = point2percent(result[i] / totalCount)
     }
@@ -152,6 +219,8 @@
         let data1 = (data * 100).toFixed(2) + "%"
         return data1
     }
+
+    document.getElementById("score").innerHTML = "这个作品的评分是：" + score;
 
     document.addEventListener("DOMContentLoaded", function () {
         const backhome = document.getElementById("home-link");
