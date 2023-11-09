@@ -5,45 +5,153 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bar Chart</title>
     <!-- 引入Chart.js库 -->
+    <script src="https://cdn.bootcss.com/echarts/3.5.4/echarts.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <div class="navbar">
     <a href="index.html" id="home-link">Back Home</a>
 </div>
-<div class="container">
-    <div class="bargraph">
-        <canvas id="bar-chart"></canvas>
-    </div>
+<div id="main" style="width: 1000px;height:400px;"></div>
+<div style="width: 600px;height:600px;">
+    <canvas id="pie-chart"></canvas>
 </div>
 <script th:inline="javascript">
     // 获取Spring模型中的result数组
+    var myChart = echarts.init(document.getElementById('main'));
     var result = [[${resultArray}]]; // 使用示例数据  [10, 20, 30, 40, 50]
+    var totalCount = result[0]
+    result = result.slice(1, 9)
+    var percent = []
+    var pie = []
+    pie[0]=result[3]+result[4]+result[7] //逻辑
+    pie[1]=result[6]
+    pie[2]=result[2]
+    pie[3]=result[5]
+    pie[4]=result[1]+result[0]//视觉
+    for (let i = 0; i < result.length; i++) {
+        percent[i] = point2percent(result[i] / totalCount)
+    }
 
-    // 创建条形图
-    var ctx = document.getElementById("bar-chart").getContext("2d");
-    var myChart = new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels: ["Label 1", "Label 2", "Label 3", "Label 4", "Label 5"], // 可以自定义标签
-            datasets: [
-                {
-                    label: "Bar Chart",
-                    data: result,
-                    backgroundColor: "rgba(75, 192, 192, 0.2)", // 条形的背景颜色
-                    borderColor: "rgba(75, 192, 192, 1)", // 条形的边框颜色
-                    borderWidth: 1, // 条形的边框宽度
-                },
-            ],
+    var category = [
+        percent[0] + "  运动",
+        percent[1] + "  外貌",
+        percent[2] + "  音乐",
+        percent[3] + "  事件",
+        percent[4] + "  控制",
+        percent[5] + "  侦测",
+        percent[6] + "  运算",
+        percent[7] + "  自制"].reverse();
+    result = result.reverse()
+    var option = {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+                type: 'shadow'
+            }
         },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true,
-                },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            axisLine: {
+                show: false
             },
+            axisTick: {
+                show: false
+            }
         },
+        yAxis: {
+            type: 'category',
+            data: category,
+            splitLine: {show: false},
+            axisLine: {
+                show: false
+            },
+            axisTick: {
+                show: false
+            },
+            offset: 10,
+            nameTextStyle: {
+                fontSize: 15
+            }
+        },
+        series: [
+            {
+                name: '数量',
+                type: 'bar',
+                data: result,
+                barWidth: 14,
+                barGap: 10,
+                smooth: true,
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'right',
+                        offset: [5, -2],
+                        textStyle: {
+                            color: '#F68300',
+                            fontSize: 13
+                        }
+                    }
+                },
+                itemStyle: {
+                    emphasis: {
+                        barBorderRadius: 7
+                    },
+                    normal: {
+                        barBorderRadius: 7,
+                        color: new echarts.graphic.LinearGradient(
+                            0, 0, 1, 0,
+                            [
+                                {offset: 0, color: '#3977E6'},
+                                {offset: 1, color: '#37BBF8'}
+
+                            ]
+                        )
+                    }
+                }
+            }
+        ]
+    };
+    myChart.setOption(option);
+    // 获取画布上下文
+    var ctx = document.getElementById("pie-chart").getContext("2d");
+
+    // 创建饼图
+    var myPieChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: ["逻辑", "流程", "媒体", "交互", "视觉"], // 标签
+            datasets: [{
+                data: pie, // 数据
+                backgroundColor: [ // 颜色
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ],
+                borderColor: [ // 边框颜色
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1 // 边框宽度
+            }]
+        }
     });
+
+    function point2percent(data) {
+        let data1 = (data * 100).toFixed(2) + "%"
+        return data1
+    }
 </script>
 </body>
 </html>
