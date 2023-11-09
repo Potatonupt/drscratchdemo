@@ -10,7 +10,7 @@
 </head>
 <body>
 <div class="navbar">
-    <a href="index.html" id="home-link">Back Home</a>
+    <label id="home-link">Back Home</label>
 </div>
 <div id="main" style="width: 1000px;height:400px;"></div>
 <div style="width: 600px;height:600px;">
@@ -152,6 +152,26 @@
         let data1 = (data * 100).toFixed(2) + "%"
         return data1
     }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const backhome = document.getElementById("home-link");
+
+        backhome.addEventListener("click", function () {
+            // 发起GET请求到后端的/toLogin
+            fetch("/backhome", {
+                method: "GET",
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // 如果请求成功，重定向到/login页面
+                        window.location.href = "/";
+                    } else {
+                        // 处理请求失败的情况
+                        console.error("Failed to redirect to login.");
+                    }
+                });
+        });
+    });
 </script>
 </body>
 </html>

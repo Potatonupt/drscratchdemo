@@ -100,5 +100,12 @@ public class UserController {
         // 重定向到/login页面
         return new RedirectView("/register", false);
     }
+
+    @GetMapping("/backhome")
+    public RedirectView backhome() {
+        // 如果需要在此处执行登录逻辑，请在此处添加登录逻辑
+        // 重定向到/login页面
+        return new RedirectView("/", false);
+    }
 }
 
