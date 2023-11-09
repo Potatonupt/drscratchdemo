@@ -24,11 +24,11 @@
     result = result.slice(1, 9)
     var percent = []
     var pie = []
-    pie[0]=result[3]+result[4]+result[7] //逻辑
-    pie[1]=result[6]
-    pie[2]=result[2]
-    pie[3]=result[5]
-    pie[4]=result[1]+result[0]//视觉
+    pie[0] = result[3] + result[4] + result[7] //逻辑
+    pie[1] = result[6]
+    pie[2] = result[2]
+    pie[3] = result[5]
+    pie[4] = result[1] + result[0]//视觉
     for (let i = 0; i < result.length; i++) {
         percent[i] = point2percent(result[i] / totalCount)
     }

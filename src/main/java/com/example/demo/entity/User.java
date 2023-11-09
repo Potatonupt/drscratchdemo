@@ -14,6 +14,16 @@ public class User
     private String username;
     private String password;
 
+    private String analysisResult;
+
+    public String getAnalysisResult() {
+        return analysisResult;
+    }
+
+    public void setAnalysisResult(String analysisResult) {
+        this.analysisResult = analysisResult;
+    }
+
     public Long getId()
     {
         return id;
