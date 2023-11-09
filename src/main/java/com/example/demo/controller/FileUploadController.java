@@ -58,7 +58,8 @@ public class FileUploadController
                         int[] result = JsonAnalyzer.analyzeSb3Project(json);
                         session.setAttribute("resultArray", result);
                         User currentUser = userService.currentUser;
-                        userService.saveAnalysisResult(currentUser, result);
+                        if (currentUser != null)
+                            userService.saveAnalysisResult(currentUser, result);
 
 //                        for (var i : result)
 //                        {
