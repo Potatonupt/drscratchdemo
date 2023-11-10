@@ -75,6 +75,10 @@
             <td th:text="${#dates.format(result.date, 'yyyy-MM-dd HH:mm')}"></td>
             <td th:text="${result.result}"></td>
             <!-- 其他列信息 -->
+            <td>
+                <a th:href="@{'/details/' + ${result.id}(resultArray=${result.result})}">查看详情</a>
+            </td>
+
         </tr>
         </tbody>
     </table>

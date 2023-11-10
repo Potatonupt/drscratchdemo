@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -123,5 +124,21 @@ public class UserController {
         // 重定向到/login页面
         return new RedirectView("/", false);
     }
+
+    @GetMapping("/details/{id}")
+    public String showDetails(@PathVariable Long id, @RequestParam("resultArray") String resultArray, Model model) {
+        String[] resultArrayAsArray = resultArray.split(",");
+
+        // 将字符数组转换为整数数组
+        int[] resultIntArray = Arrays.stream(resultArrayAsArray)
+                .map(s -> s.replaceAll("[^0-9]", "")) // 去除非数字字符
+                .filter(s -> !s.isEmpty()) // 过滤空字符串
+                .mapToInt(Integer::parseInt)
+                .toArray();
+
+        model.addAttribute("resultArray", resultIntArray);
+        return "uploadForm"; // 替换成你的显示页面的逻辑
+    }
+
 }
 

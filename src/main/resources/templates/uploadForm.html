@@ -140,6 +140,7 @@
     pie[2] = result[2]
     pie[3] = result[5]
     pie[4] = result[1] + result[0]//视觉
+    console.log(pie)
     var score = 0.4 * pie[0] + 0.1 * pie[1] + 0.1 * pie[2] + 0.1 * pie[3] + 0.3 * pie[4]
     for (let i = 0; i < result.length; i++) {
         percent[i] = point2percent(result[i] / totalCount)
