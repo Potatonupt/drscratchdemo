@@ -9,6 +9,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -50,8 +52,13 @@ public class UserService {
         AnalysisResult analysisResult = new AnalysisResult();
         analysisResult.setUser(user);
         analysisResult.setResult(resultStr);
+        analysisResult.setDate(new Date());
 
         return analysisResultRepository.save(analysisResult);
     }
 
+    public List<AnalysisResult> getHistoryResults(User user) {
+        // 根据用户获取历史分析结果的逻辑，可能是查询数据库等
+        return analysisResultRepository.findByUserOrderByDateDesc(user);
+    }
 }

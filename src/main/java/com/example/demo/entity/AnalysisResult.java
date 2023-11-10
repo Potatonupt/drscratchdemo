@@ -1,11 +1,10 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import org.springframework.data.annotation.Id;
+import java.util.Date;
 
 @Entity
 public class AnalysisResult {
-    @jakarta.persistence.Id
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -16,35 +15,40 @@ public class AnalysisResult {
 
     private String result;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;  // 新增的日期字段
+
     // getters and setters
 
-    public Long getId()
-    {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Long id)
-    {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public User getUser()
-    {
+    public User getUser() {
         return user;
     }
 
-    public void setUser(User user)
-    {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public String getResult()
-    {
+    public String getResult() {
         return result;
     }
 
-    public void setResult(String result)
-    {
+    public void setResult(String result) {
         this.result = result;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.AnalysisResult;
 import com.example.demo.entity.User;
 import com.example.demo.service.UserRepository;
 import com.example.demo.service.UserService;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
+
+import java.util.List;
 
 @Controller
 public class UserController {
@@ -78,9 +81,22 @@ public class UserController {
     @GetMapping("/user/{username}")
     public String userProfile(@PathVariable String username, Model model) {
         // 根据用户名查询用户的个人信息，然后将信息传递给模板
-        User user = userRepository.findByUsername(username);
-        model.addAttribute("user", user);
-        return "user_profile"; // 渲染用户的个人资料页
+        User currentUser = userRepository.findByUsername(username);
+        model.addAttribute("user", currentUser);
+
+
+        if (currentUser != null) {
+            // 获取当前用户的历史分析结果
+            List<AnalysisResult> historyResults = userService.getHistoryResults(currentUser);
+
+            // 将结果传递给前端页面
+            model.addAttribute("historyResults", historyResults);
+
+            return "user_profile"; // 返回展示历史记录的页面
+        } else {
+            return "redirect:/login"; // 如果用户未登录，重定向到登录页面
+        }
+
     }
 
 
